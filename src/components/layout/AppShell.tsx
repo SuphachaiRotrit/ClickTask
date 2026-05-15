@@ -45,7 +45,7 @@ export function AppShell({ children }: AppShellProps) {
 
       <div
         className={cn(
-          "flex flex-1 flex-col transition-[margin] duration-300 ease-in-out",
+          "flex flex-1 flex-col min-w-0 transition-[margin] duration-300 ease-in-out",
           sidebarCollapsed ? "md:ml-[68px]" : "md:ml-[240px]",
           "ml-0"
         )}
@@ -54,7 +54,7 @@ export function AppShell({ children }: AppShellProps) {
           onMobileMenuToggle={() => setMobileMenuOpen((prev) => !prev)}
           mobileMenuOpen={mobileMenuOpen}
         />
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 p-4 md:p-6 min-w-0 overflow-hidden">{children}</main>
       </div>
 
       {selectedTask && (
