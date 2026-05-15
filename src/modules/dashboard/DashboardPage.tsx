@@ -7,9 +7,6 @@ import { TaskFiltersBar } from "@/modules/dashboard/components/TaskFilters";
 import { TaskBoard } from "@/modules/dashboard/components/TaskBoard";
 import { NewTaskDialog } from "@/modules/dashboard/components/NewTaskDialog";
 
-// =============================================
-// Dashboard Page Component (Module)
-// =============================================
 export function DashboardPage() {
   const { tasks } = useTasks();
   const { t } = useLanguage();

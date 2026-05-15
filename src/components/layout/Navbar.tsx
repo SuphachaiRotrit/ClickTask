@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import {
   Tooltip,
   TooltipContent,
@@ -34,7 +35,12 @@ interface NavbarProps {
 }
 
 export function Navbar({ onMobileMenuToggle, mobileMenuOpen }: NavbarProps) {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const { locale, setLocale, t } = useLanguage();
   const { tasks, setSelectedTaskId } = useTasks();
   const { statuses } = useStatuses();
@@ -185,44 +191,18 @@ export function Navbar({ onMobileMenuToggle, mobileMenuOpen }: NavbarProps) {
           </TooltipContent>
         </Tooltip>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative size-8 sm:size-9">
-              <Icon
-                icon="lucide:sun"
-                className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-              />
-              <Icon
-                icon="lucide:moon"
-                className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-              />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-36">
-            <DropdownMenuItem
-              onClick={() => setTheme("light")}
-              className={cn(theme === "light" && "bg-muted font-medium")}
-            >
-              <Icon icon="lucide:sun" className="mr-2 size-4" />
-              {t("theme.light")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setTheme("dark")}
-              className={cn(theme === "dark" && "bg-muted font-medium")}
-            >
-              <Icon icon="lucide:moon" className="mr-2 size-4" />
-              {t("theme.dark")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setTheme("system")}
-              className={cn(theme === "system" && "bg-muted font-medium")}
-            >
-              <Icon icon="lucide:monitor" className="mr-2 size-4" />
-              {t("theme.system")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {mounted ? (
+          <div className="flex items-center gap-2 px-1">
+            <Icon icon="lucide:sun" className="size-4 text-muted-foreground" />
+            <Switch
+              checked={resolvedTheme === "dark"}
+              onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+            />
+            <Icon icon="lucide:moon" className="size-4 text-muted-foreground" />
+          </div>
+        ) : (
+          <div className="w-[84px]" />
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
