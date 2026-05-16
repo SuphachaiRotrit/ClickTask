@@ -15,13 +15,16 @@ interface TaskColumnProps {
   statusConfig: StatusConfig;
   tasks: Task[];
   pageSize?: number;
+  isFiltered?: boolean;
 }
 
 export function TaskColumn({
   statusConfig,
   tasks,
-  pageSize = COLUMN_PAGE_SIZE,
+  pageSize: propPageSize,
+  isFiltered = false,
 }: TaskColumnProps) {
+  const pageSize = propPageSize || (isFiltered ? 20 : COLUMN_PAGE_SIZE);
   const rgb = hexToRgb(statusConfig.color);
   const { t } = useLanguage();
 
@@ -54,7 +57,6 @@ export function TaskColumn({
           backgroundColor: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`,
         }}
         onClick={() => {
-          // Only allow collapsing on small screens
           if (typeof window !== "undefined" && window.innerWidth < 768) {
             setIsCollapsed(!isCollapsed);
           }
@@ -92,7 +94,10 @@ export function TaskColumn({
       </div>
 
       <div className={cn(isCollapsed && "hidden md:block")}>
-        <div className="flex flex-1 flex-col gap-3">
+        <div className={cn(
+          "flex flex-col gap-3",
+          isFiltered && "md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        )}>
           {visibleTasks.length === 0 ? (
             <div
               className="flex h-24 items-center justify-center rounded-lg border border-dashed text-xs text-muted-foreground"
